@@ -4,7 +4,7 @@ pipeline {
         PROJECT_ID = 'daring-emitter-344207'
         CLUSTER_NAME = 'kube'
         LOCATION = 'asia-northeast3-a'
-        CREDENTIALS_ID = 'daring-emitter-344207'
+        CREDENTIALS_ID = 'gke'
     }
     stages {
         stage("Checkout code") {
@@ -30,6 +30,9 @@ pipeline {
             }
         }        
         stage('Deploy to GKE') {
+			when {
+				branch 'master'
+			}
             steps{
                 sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])

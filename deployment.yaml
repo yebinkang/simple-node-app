@@ -20,7 +20,7 @@ template:
       ports:
       - containerPort: 5000
         name: hello
-
+---
 apiVersion: v1
 kind: Service
 metadata:
